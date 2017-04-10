@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+
+
+   <bean name="helloService"
+        class="com.spring.remote.RemoteHelloImpl" />
+
+	<bean id="helloRemote" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+		<property name="serviceUrl"
+			value="http://127.0.0.1/test/wan" />
+		<property name="serviceInterface" value="com.spring.remote.RemoteHello" />
+	</bean>
+	
+	
+	<bean name="helloExporter"
+        class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter">
+        <property name="service" ref="helloService"></property>
+        <property name="serviceInterface" value="com.spring.remote.RemoteHello">
+        </property>
+    </bean>
+
+</beans>
