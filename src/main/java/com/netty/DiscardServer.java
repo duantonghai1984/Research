@@ -16,55 +16,84 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.Delimiters;
+import io.netty.handler.codec.FixedLengthFrameDecoder;
 import io.netty.handler.codec.LineBasedFrameDecoder;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.util.ReferenceCountUtil;
 
 /**
  * Discards any incoming data.
  */
-public class DiscardServer extends NettyServerBase {
+public class DiscardServer {
 
   
+    private int port;
+
     public DiscardServer(int port) {
-		super(port);
-	}
+        this.port = port;
+    }
 
-    public class DiscardServerHandler extends ChannelInboundHandlerAdapter { // (1)
+    public void run() throws Exception {
+        EventLoopGroup bossGroup = new NioEventLoopGroup(); // (1)
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap b = new ServerBootstrap(); // (2)
+            b.group(bossGroup, workerGroup)
+             .channel(NioServerSocketChannel.class) // (3)
+             .childHandler(new ChannelInitializer<SocketChannel>() { // (4)
+                 @Override
+                 public void initChannel(SocketChannel ch) throws Exception {
+                     /*ByteBuf delimiter = Unpooled.copiedBuffer("$_".getBytes());
+                     ch.pipeline().addLast(new DelimiterBasedFrameDecoder(1024, delimiter));*/
+                     ch.pipeline().addLast(new FixedLengthFrameDecoder(200));
+                     ch.pipeline().addLast(new StringDecoder());
+                     ch.pipeline().addLast(new DiscardServerHandler());
+                 }
+             })
+             .option(ChannelOption.SO_BACKLOG, 128)          // (5)
+             .childOption(ChannelOption.SO_KEEPALIVE, true); // (6)
 
-    	private int counter;
-    	
+            // Bind and start to accept incoming connections.
+            ChannelFuture f = b.bind(port).sync(); // (7)
+
+            // Wait until the server socket is closed.
+            // In this example, this does not happen, but you can do that to gracefully
+            // shut down your server.
+            f.channel().closeFuture().sync();
+        } finally {
+            workerGroup.shutdownGracefully();
+            bossGroup.shutdownGracefully();
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        new DiscardServer(8900).run();
+    }
+
+	
+    public static class DiscardServerHandler extends ChannelInboundHandlerAdapter { // (1)
+
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) { // (2)
-           
-             ByteBuf buf=(ByteBuf)msg;
-             byte[] req=new byte[buf.readableBytes()];
-             buf.readBytes(req);
-             String body="fdsfdfd";
-             System.out.println("counter:"+(this.counter++));
-             System.out.println(new String(req));
-             ByteBuf resp=Unpooled.copiedBuffer(body.getBytes());
-             ctx.writeAndFlush(resp);
+            try {
+                String buf = (String) msg; // (1)
+                System.out.println("msg:"+new String(buf));
+            } finally {
+                ReferenceCountUtil.release(msg); // (2)
+            }
+            
+            
         }
         
-        
-        
-        /*@Override
-        public void channelActive(final ChannelHandlerContext ctx) { // (1)
-            final ByteBuf time = ctx.alloc().buffer(4); // (2)
-            time.writeInt((int) (System.currentTimeMillis() / 1000L + 2208988800L));
-
-            final ChannelFuture f = ctx.writeAndFlush(time); // (3)
-            f.addListener(new ChannelFutureListener() {
-                @Override
-                public void operationComplete(ChannelFuture future) {
-                    assert f == future;
-                   // ctx.close();
-                }
-            }); // (4)
-        }*/
+        @Override
+        public void channelActive(ChannelHandlerContext ctx) throws Exception {
+           // ctx.writeAndFlush("server msg\n");
+        }
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) { // (4)
@@ -72,22 +101,4 @@ public class DiscardServer extends NettyServerBase {
             ctx.close();
         }
     }
-
-    public static void main(String[] args) throws Exception {
-        new DiscardServer(8080).run();
-    }
-
-	@Override
-	public ChannelHandler getChannelHandler() {
-		return new ChannelInitializer<SocketChannel>() { // (4)
-            @Override
-            public void initChannel(SocketChannel ch) throws Exception {
-           	/* ch.pipeline().addLast(new LineBasedFrameDecoder(1024));
-           	 ch.pipeline().addLast(new StringDecoder());*/
-           	 //ch.pipeline().addLast(new ObjectDecoder(1024*1024,ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader())));
-           	// ch.pipeline().addLast(new ObjectEncoder());
-                ch.pipeline().addLast(new DiscardServerHandler());
-            }
-        };
-	}
 }

@@ -1,0 +1,47 @@
+<html>
+<head>
+<title></title>
+<style>
+  
+ </style>
+
+  </head>
+  <body>
+ <script language="javascript">
+ 
+ var Lodop=(function(){
+			var _str="duantonghai";
+	       function getStr(){
+	        	return _str;
+	        } ;
+
+	       return {
+	    	   getName: getStr
+	       };	
+ })();
+ 
+ alert(Lodop.getName());
+     
+	 var SendParameter = "<root>" + "<childnode1><收件人姓名>  王蓉</收件人姓名><收件人地址>  上海黄浦区延安东路区域发生的发生大幅23423</收件人地址><收件人邮编>  200002</收件人邮编></childnode1>" + "</root>";
+     try{
+      var oXML = new ActiveXObject("Microsoft.XMLDOM");
+	  oXML.async = "false";
+	  oXML.loadXML(SendParameter);
+	  var num=oXML.documentElement.childNodes.item(0).childNodes.length;
+	  var childNoes=oXML.documentElement.childNodes.item(0).childNodes;
+	  var name=childNoes.item(0).text;
+	  alert(name);
+	  var address=childNoes.item(1).text;
+	  alert(address);
+	  
+	  alert(childNoes.item(1).nodeName);
+	  
+	  var mobile=childNoes.item(2).text;
+	  alert(mobile);
+	  }catch(e){
+	  
+	  }
+  </script>
+  
+</body>
+</html>

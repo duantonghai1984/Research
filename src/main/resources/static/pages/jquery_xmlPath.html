@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../js/jquery-1.7.2.min.js"></script>
+<script>
+var space={};
+
+    space.SendInfo=(name,address,tel,zipCode,type){
+	this.name=name;
+	this.address=address;
+	this.tel=tel;
+	this.zipCode=zipCode;
+	this.type=type;
+};
+
+
+function test(sendInfo){
+   alert(sendInfo.constructor);
+    if(typeof sendInfo !=='space.SendInfo' ){
+    	alert("error input")
+    }
+
+}
+
+$(function(){
+/*
+	$(book).find("book").each(function(){
+		alert($(this).find('title').text());
+	});
+	*/
+	//alert($(book).find("收件人姓名").text());
+	
+	var obj=new space.SendInfo();
+	obj.name='duant';
+	alert(obj.name);
+	test(obj);
+	$(book).find("childnode1").each(function(){
+		alert($(this).find("收件人姓名").text());
+	});
+});
+var book="<root><childnode1><收件人姓名>主干测试1</收件人姓名><收件人地址>  上海黄浦区人民广场区域万航渡路888号</收件人地址><收件人邮编>  200003</收件人邮编></childnode1></root>";
+
+
+
+</script>
+</head>
+<body>
+
+</body>
+</html>

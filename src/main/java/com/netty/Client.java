@@ -39,6 +39,7 @@ public class Client extends NettyClientBase{
 				message=Unpooled.buffer(req.length);
 				message.writeBytes(req);
 				ctx.writeAndFlush(message);
+			    //ctx.writeAndFlush(req);
 			}
 		}
 
@@ -65,7 +66,7 @@ public class Client extends NettyClientBase{
 	
 
 	public static void main(String[] args) {
-	        Client client=new Client("127.0.0.1",8080);
+	        Client client=new Client("127.0.0.1",NettyConstant.port);
 	        client.run();
 	}
 

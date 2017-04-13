@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="../../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../js/easyui/themes/icon.css">
+<script type="text/javascript" src="../../js/easyui/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../../js/easyui/jquery.easyui.min.js"></script>
+
+<script>
+
+
+function add(a,b){
+	return a+b;
+}
+
+function b(){
+	
+};
+var c=new b();
+alert(add.call(c,2,3));
+
+$(function(){
+ var result=false;
+
+$.messager.confirm('取消打印','您确定要停止打印吗?',function(r){  
+    if (r){  
+        alert('r'+r);  
+        result=true;
+    }  else{
+    	result=false;
+    }
+    alert(result);
+});  
+ 
+$('#state').combobox({
+	width : 50,
+	listWidth : 50,
+	editable : false,
+	panelHeight : 'auto',
+	onBeforeLoad : function() {
+    	$('#state').combobox('select', '-1');        		
+	}
+});
+
+$('#dg').datagrid({  
+    url:'', 
+    method: 'post',
+	singleSelect : false,
+	pagination : true,
+	rownumbers: true,
+	nowrap : false,
+	sortName: "code",
+	idField:'id',
+	
+    columns:[[ 
+		{field:'kk',width:70,align:"center",checkbox:true},
+        {field:'code',title:'Code',width:100},  
+        {field:'name',title:'Name',width:100},  
+        {field:'price',title:'Price',width:100,align:'right'},
+        {field:'des',title:'des',width:100}
+    ]]  
+}); 
+
+var pg = $('#dg').datagrid('getPager');
+$(pg).pagination({
+	pageSize : 10,// 每页显示的记录条数，默认为10
+	pageList : [ 10, 20, 30 ],// 可以设置每页记录条数的列表
+	beforePageText : '第',// 页数文本框前显示的汉字
+	afterPageText : '页    共 {pages} 页',
+	displayMsg : '当前显示 0 - 0 条记录   共 0 条记录'
+});
+
+$.extend($.fn.validatebox.defaults.rules, {  
+    minLength: {  
+        validator: function(value, param){  
+            return value.length >= param[0];  
+        },  
+        message: 'Please enter at least {0} characters.'  
+    }  
+}); 
+
+})
+
+
+function search(){
+	$('#dg').datagrid('options').url="data.json";
+	$('#dg').datagrid('load',{});
+}
+</script>
+</head>
+<body>
+
+<div id="p" class="easyui-progressbar" style="width:400px;"></div>
+
+
+<select class="easyui-combobox" id="state" style="width:200px;">  
+        <option value="AL">Alabama</option>  
+        <option value="AK">Alaska</option>  
+        <option value="AZ">Arizona</option>  
+        <option value="AR">Arkansas</option>  
+        <option value="CA">California</option>  
+        <option value="CO">Colorado</option>  
+</select>
+
+
+<select class="easyui-combobox" id="state2" style="width:50px;">  
+        <option value="AL">Alabama</option>  
+        <option value="AK">Alaska</option>  
+        <option value="AZ">Arizona</option>  
+        <option value="AR">Arkansas</option>  
+        <option value="CA">California</option>  
+        <option value="CO">Colorado</option>  
+</select> 
+
+<hr/>
+
+<input id="search" type="button" onclick="search()" value="查询"></input>
+<table id="dg" style="width:auto;"></table>  
+
+
+<input class="easyui-validatebox" data-options="validType:'minLength[5]'" /> 
+
+</body>
+</html>

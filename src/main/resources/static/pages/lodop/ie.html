@@ -1,0 +1,74 @@
+<head>
+<title></title>
+
+<script language="javascript">
+      <!--
+      function printWithAlert() {
+        document.all.WebBrowser.ExecWB(6,1);
+      }
+
+      function printWithoutAlert() {
+        document.all.WebBrowser.ExecWB(6,6);
+      }
+
+      function printSetup() {
+        document.all.WebBrowser.ExecWB(8,1);
+      }
+
+      function printPrieview() {
+        document.all.WebBrowser.ExecWB(7,1);
+      }
+
+      function printImmediately() {
+        document.all.WebBrowser.ExecWB(6,6);
+        window.close();
+      }
+      -->
+  </script>
+  </head>
+  <body>
+ 
+  <!-- 此控件用来直接调用浏览器的一些方法 -->
+  <OBJECT  id=WebBrowser  classid=CLSID:8856F961-340A-11D0-A96B-00C04FD705A2 style="display:none">  </OBJECT>
+ 
+  <!-- 适用于打印机的样式设置 -->
+  <style media=print>
+  .Noprint{display:none;}
+  .PageNext{page-break-after: always;}
+  </style>
+
+ 
+  <table align="center" class=NOPRINT>
+    <tr>
+    <td align="center">
+    <BUTTON title=打印 onclick=printWithAlert()>打印<IMG src="http://www.jatools.com/tools/images/print.gif" align=absmiddle></BUTTON>
+     <BUTTON title=直接打印 onclick=printWithoutAlert()>直接打印<IMG src="http://www.jatools.com/tools/images/print.gif" align=absmiddle></BUTTON>
+    <input type=button value="打印设置" onclick="printSetup()" >
+    <button onclick ='printPrieview()' title='打印预览...' >打印预览<img src='http://www.jatools.com/tools/images/preview.gif'  align=absmiddle></button>
+    </td>
+    </tr>
+  </table>
+ 
+ <div  class=NOPRINT> 以下为打印区:<br></div>
+
+ 
+ <hr size=1 noshadow color=black  class=NOPRINT >
+ 
+<table class="PageNext" style="border:1;color:red;">
+  <tr><td colspan=2>第一页数据</td></tr>
+   <tr><td>用户名</td><td>地址</td></tr>
+    <tr><td>张三</td><td>北京</td></tr>
+  </table>
+
+<hr size=1 noshadow color=black  class=NOPRINT >
+
+
+ <div class="PageNext">
+第二页数据
+</div>
+
+<hr size=1 noshadow color=black  class=NOPRINT >
+
+第三页数据
+</body>
+</html>

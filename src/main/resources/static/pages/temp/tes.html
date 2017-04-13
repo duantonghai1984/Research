@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+
+<script type="text/javascript" src="../../js/jquery/jquery-191.js"></script>
+<script type="text/javascript" src="../../js/design/lodop/invoiceUtil.js"></script>
+
+</head>
+<body>
+<script>
+function classExtend(subClass, superClass) {
+    var F = function() {};
+    F.prototype = superClass.prototype;
+    subClass.prototype = F.prototype;
+    subClass.prototype.constructor = subClass;
+    subClass.superClass = superClass;
+};
+
+
+function myArray(name,age){				 
+	if(myArray.superClass){
+		myArray.superClass.call(this,name,age);
+	}
+		
+}
+
+function person(name,age){
+	 var name1=name;
+	 
+	 this.age=age;
+	
+	this.getName = function(){
+		return name;
+	};
+}
+
+person.prototype.getAge=function(){
+	return this.age;
+};
+
+person.prototype={
+		getName2:function(){
+	             return this.getName();
+		},
+		
+		getName3:function(){
+			return 'name3';
+		}
+}
+
+
+	
+ classExtend(myArray,person);
+
+var a=new myArray('duant',20);
+alert('name '+a.getName2());
+ 
+
+/* var b=new person('duant',30);
+alert(b.getName2()); */
+
+
+</script>
+</body>
+</html>
