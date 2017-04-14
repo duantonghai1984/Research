@@ -1,4 +1,4 @@
-package com.mysql.proxy.netty;
+package com.mysql.proxy.netty.test;
 
 import com.alibaba.fastjson.JSON;
 import com.netty.NettyConstant;
@@ -76,14 +76,18 @@ public class TestServer {
                     rsMsg = new String(req);
                 }
             }
-           // ctx.writeAndFlush(msg);
+            byte[] req="server echo".getBytes();
+            ByteBuf message=Unpooled.buffer(req.length);
+            message.writeBytes(req);
+            ctx.writeAndFlush(message);
+            
             ReferenceCountUtil.release(msg);
             System.out.println("server recMsg:"+rsMsg); 
         }
 
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
-            // ctx.writeAndFlush("server msg\n");
+             ctx.writeAndFlush("server channelActive msg\n");
         }
 
         @Override

@@ -1,10 +1,11 @@
-package com.mysql.proxy.netty;
+package com.mysql.proxy.netty.test;
 
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 
 import com.netty.NettyConstant;
+import com.netty.HandlerInitializer.IdleStateHandlerInitializer;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -62,6 +63,7 @@ public class TestClient {
             b.handler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception {
+                   // ch.pipeline().addLast(new IdleStateHandlerInitializer());
                     ch.pipeline().addLast(new Hanlder());
                 }
             });
@@ -74,9 +76,7 @@ public class TestClient {
              }
              System.out.println("connect sus");
             // Wait until the connection is closed.
-            f.channel().closeFuture().sync();
-            
-           
+           // f.channel().closeFuture().sync();
             
         } finally {
             workerGroup.shutdownGracefully();
@@ -86,14 +86,11 @@ public class TestClient {
     
     
     
-    public void sent(final Object msg) {
-        if(this.socketChannel.isActive()){
-        this.socketChannel.pipeline().writeAndFlush(msg);
-        this.socketChannel.flush();
-        System.out.println("channel is not active");
-        }else{
-            System.out.println("channel is not active");
-        }
+    public void sent(final String msg) {
+        byte[] req=msg.getBytes();
+        ByteBuf message=Unpooled.buffer(req.length);
+        message.writeBytes(req);
+        this.socketChannel.writeAndFlush(message);
     }
     
     public static class Hanlder extends ChannelInboundHandlerAdapter { // (1)

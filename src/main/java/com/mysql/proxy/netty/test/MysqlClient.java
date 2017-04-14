@@ -1,4 +1,4 @@
-package com.mysql.proxy.netty;
+package com.mysql.proxy.netty.test;
 
 import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
@@ -141,12 +141,12 @@ public class MysqlClient extends NettyClientBase {
         MysqlClient client=new MysqlClient("127.0.0.1",3306);
         client.run();
        
-        AuthPacket auth= MysqlContans.buildAuthPack("root", "root", MysqlContans.handshark);
+       /* AuthPacket auth= MysqlContans.buildAuthPack("root", "root", MysqlContans.handshark);
         ByteBuffer buffer = ByteBuffer.allocate(256);
         auth.write(buffer);
         buffer.flip();
         client.socketChannel.writeAndFlush(buffer); 
-        client.socketChannel.writeAndFlush("test");
+        client.socketChannel.writeAndFlush("test");*/
         
         System.in.read();
         System.in.read();

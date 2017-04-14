@@ -1,4 +1,4 @@
-package com.mysql.proxy.netty;
+package com.mysql.proxy.netty.test;
 
 import java.net.InetSocketAddress;
 

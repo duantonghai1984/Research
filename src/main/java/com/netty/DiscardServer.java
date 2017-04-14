@@ -92,7 +92,7 @@ public class DiscardServer {
         
         @Override
         public void channelActive(ChannelHandlerContext ctx) throws Exception {
-           // ctx.writeAndFlush("server msg\n");
+           ctx.writeAndFlush("server msg\n");
         }
 
         @Override

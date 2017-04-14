@@ -1,4 +1,4 @@
-package com.mysql.proxy.netty;
+package com.netty.HandlerInitializer;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +17,7 @@ public class IdleStateHandlerInitializer extends ChannelInitializer<Channel>{
 
     @Override
     protected void initChannel(Channel ch) throws Exception {
-       ch.pipeline().addLast(new IdleStateHandler(0,0,60,TimeUnit.SECONDS)); 
+       ch.pipeline().addLast(new IdleStateHandler(0,0,10,TimeUnit.SECONDS)); 
        ch.pipeline().addLast(new HeartbeatHandler());
     }
 
@@ -29,6 +29,7 @@ public class IdleStateHandlerInitializer extends ChannelInitializer<Channel>{
         @Override
         public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
             if( evt instanceof IdleStateEvent){
+                System.out.println("IdleStateEvent");
                 ctx.writeAndFlush(HEARTBEAT_SEQUENCE.duplicate()).addListener(ChannelFutureListener.CLOSE_ON_FAILURE);
             }else{
               super.userEventTriggered(ctx, evt);
