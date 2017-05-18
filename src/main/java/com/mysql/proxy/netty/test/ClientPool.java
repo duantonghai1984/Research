@@ -97,7 +97,7 @@ public class ClientPool {
                     if (f.isSuccess()) {
                         Channel ch = f.getNow();
                         ch.writeAndFlush("pool test"+NettyConstant.seq);
-                        channelPool.release(ch);
+                       // channelPool.release(ch);
                         System.out.println("send data");
                     } else {
                         System.out.println("fdfd");

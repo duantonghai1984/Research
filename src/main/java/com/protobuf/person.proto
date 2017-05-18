@@ -1,0 +1,26 @@
+syntax = "proto3";
+package com.protobuf;
+
+option java_package="com.protobuf.jbean";
+option java_outer_classname="PersonProto2";
+
+message Person{
+
+     string name=1;
+     int32 age=2;
+     string birthday=3;
+     bool man=4;
+
+    enum PhotoType{
+    	MOBILE=0;
+    	HOME=1;
+    	WORD=2;
+    }
+
+    message PhotoNumber{
+        string number=1;
+        PhotoType type=2;
+    }
+
+    repeated PhotoNumber phone=5;
+}

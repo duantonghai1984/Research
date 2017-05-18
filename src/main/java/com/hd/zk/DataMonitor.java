@@ -37,6 +37,7 @@ public class DataMonitor implements Watcher, StatCallback {
         // Get things started by checking if the node exists. We are going
         // to be completely event driven
         zk.exists (znode, true, this, null);
+        
     }
 
     public void process (WatchedEvent event) {
